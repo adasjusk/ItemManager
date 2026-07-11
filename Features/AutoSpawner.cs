@@ -10,16 +10,9 @@ using Random = UnityEngine.Random;
 
 namespace ItemManager.Features
 {
-    /// <summary>
-    /// At round start, automatically spawns glowing items scattered on the floor of random
-    /// rooms, driven by the auto_spawn_rules config (zone, optional room filter, item pool,
-    /// count). Points are validated with raycasts so items always land on the ground inside
-    /// the chosen room.
-    /// </summary>
     internal sealed class AutoSpawner
     {
         private static Config Cfg => ItemManagerPlugin.Cfg;
-
         private CoroutineHandle _routine;
 
         public void Start()
@@ -45,7 +38,6 @@ namespace ItemManager.Features
         }
 
         private void OnRoundRestarted() => Timing.KillCoroutines(_routine);
-
         private static IEnumerator<float> SpawnRoutine()
         {
             yield return Timing.WaitForSeconds(Mathf.Max(0.5f, Cfg.AutoSpawnDelaySeconds));
@@ -105,9 +97,6 @@ namespace ItemManager.Features
 
             return spawned;
         }
-
-        /// <summary>Finds a random spot on the floor of the room, retrying until the point is
-        /// really inside that room and has ground under it.</summary>
         private static bool TryGetFloorPoint(Room room, out Vector3 point)
         {
             for (int attempt = 0; attempt < 8; attempt++)
@@ -127,6 +116,4 @@ namespace ItemManager.Features
 
             point = default;
             return false;
-        }
-    }
-}
+}   }   }

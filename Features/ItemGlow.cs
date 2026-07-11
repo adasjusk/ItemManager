@@ -7,12 +7,6 @@ using UnityEngine;
 
 namespace ItemManager.Features
 {
-    /// <summary>
-    /// Attaches a colored point light to spawned pickups so they glow in a color matching the
-    /// item (green medkit, cyan adrenaline, red SCP-500, ...). The light is parented to the
-    /// pickup, so it follows the item and is automatically destroyed with it; picking the item
-    /// up removes the glow.
-    /// </summary>
     internal static class ItemGlow
     {
         private static readonly Dictionary<ushort, LightSourceToy> ActiveLights = new Dictionary<ushort, LightSourceToy>();
@@ -65,7 +59,6 @@ namespace ItemManager.Features
 
         private static void OnRoundRestarted()
         {
-            // The map (including all toys) is wiped on restart; just forget the references.
             ActiveLights.Clear();
         }
 
@@ -75,8 +68,6 @@ namespace ItemManager.Features
                 return;
 
             ActiveLights.Remove(serial);
-
-            // Mirror already cascades destruction from the parent pickup; this is a safety net.
             if (light != null && !light.IsDestroyed)
                 light.Destroy();
         }
@@ -114,6 +105,4 @@ namespace ItemManager.Features
             }
 
             return ColorUtility.TryParseHtmlString(fallback, out Color color) ? color : Color.white;
-        }
-    }
-}
+}   }  }

@@ -10,11 +10,6 @@ using Logger = LabApi.Features.Console.Logger;
 
 namespace ItemManager.Features
 {
-    /// <summary>
-    /// Once the round is old enough (LCZ is decontaminated anyway), periodically deletes
-    /// every leftover item pickup and dead body inside the Light Containment Zone so the
-    /// server does not keep simulating junk nobody can reach.
-    /// </summary>
     internal sealed class LczCleaner
     {
         private static Config Cfg => ItemManagerPlugin.Cfg;
@@ -25,8 +20,6 @@ namespace ItemManager.Features
         {
             ServerEvents.RoundStarted += OnRoundStarted;
             ServerEvents.RoundRestarted += OnRoundRestarted;
-
-            // Covers plugin reloads that happen mid-round.
             if (Round.IsRoundInProgress)
                 OnRoundStarted();
         }
@@ -48,7 +41,6 @@ namespace ItemManager.Features
         }
 
         private void OnRoundRestarted() => Timing.KillCoroutines(_routine);
-
         private IEnumerator<float> CleanupRoutine()
         {
             float startDelay = Cfg.CleanerStartMinutes * 60f - (float)Round.Duration.TotalSeconds;
@@ -56,7 +48,6 @@ namespace ItemManager.Features
                 yield return Timing.WaitForSeconds(startDelay);
 
             Logger.Info($"LCZ cleanup is now active (round older than {Cfg.CleanerStartMinutes} minutes).");
-
             while (Round.IsRoundInProgress)
             {
                 try
@@ -111,6 +102,4 @@ namespace ItemManager.Features
 
             if (items > 0 || corpses > 0)
                 Logger.Info($"LCZ cleanup: removed {items} item(s) and {corpses} corpse(s).");
-        }
-    }
-}
+}   }   }
